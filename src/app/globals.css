@@ -1,0 +1,358 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────
+   TAILWIND 4 — @theme tokens
+   Usables como clases: bg-bg-base, text-gold, font-display, etc.
+──────────────────────────────────────────────────────────── */
+@theme {
+  /* Colores */
+  --color-bg-base:          #0A0807;
+  --color-bg-elevated:      #1A1310;
+  --color-bg-surface:       #241C18;
+  --color-border:           #2E2520;
+  --color-text-primary:     #E8DDD0;
+  --color-text-secondary:   #9A8E82;
+  --color-gold:             #C9A961;
+  --color-gold-dim:         #8A6F3A;
+  --color-gold-hi:          #D4B87A;
+  --color-gold-pale:        #E8D5A8;
+
+  /* Design-system color scale (complemento) */
+  --color-black:            #0D0C0A;
+  --color-charcoal:         #1A1814;
+  --color-charcoal-mid:     #252118;
+  --color-charcoal-hi:      #302C24;
+  --color-smoke:            #3D3830;
+  --color-cream-dim:        #6B6560;
+  --color-cream:            #9E9890;
+  --color-cream-hi:         #C4BDB5;
+  --color-parchment:        #E8E0D4;
+  --color-white-warm:       #F5F0E8;
+
+  /* Gold tint/shade scale */
+  --color-gold-100:         #F5EDD8;
+  --color-gold-200:         #EBDAB8;
+  --color-gold-300:         #DEC695;
+  --color-gold-400:         #D4B47C;
+  --color-gold-500:         #C9A96E;
+  --color-gold-600:         #A18855;
+  --color-gold-700:         #79663F;
+  --color-gold-800:         #514429;
+  --color-gold-900:         #292213;
+
+  /* Semánticos */
+  --color-success:          #4A7C59;
+  --color-error:            #8B3A3A;
+  --color-warning:          #7A6230;
+  --color-whatsapp:         #25D366;
+
+  /* Fuentes — next/font inyecta --font-cormorant y --font-inter en <html>
+     Tailwind 4 genera utilities font-display y font-body desde --font-{name} */
+  --font-display: var(--font-cormorant), Georgia, serif;
+  --font-body:    var(--font-inter), system-ui, -apple-system, sans-serif;
+
+  /* Breakpoints */
+  --breakpoint-sm:  640px;
+  --breakpoint-md:  768px;
+  --breakpoint-lg:  1024px;
+  --breakpoint-xl:  1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* Spacing adicional editorial */
+  --spacing-section: clamp(4rem, 8vw, 8rem);
+
+  /* Border radius — estética angular elegante */
+  --radius-none: 0px;
+  --radius-xs:   1px;
+  --radius-sm:   2px;
+  --radius-base: 3px;
+  --radius-img:  2px;
+  --radius-full: 0px;
+
+  /* Animations / easings */
+  --ease-cinematic: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-quart:  cubic-bezier(0.5, 0, 0.75, 0);
+  --ease-smooth:    cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-hover:     cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ─────────────────────────────────────────────────────────
+   CSS CUSTOM PROPERTIES — :root (autoritativo)
+   Accesibles desde JS/GSAP y componentes vía var()
+──────────────────────────────────────────────────────────── */
+:root {
+  color-scheme: dark; /* scrollbars e inputs nativos en dark */
+
+  /* ─── COLORES ─────────────────────────────────────────── */
+  --bg-base:           #0A0807;
+  --bg-elevated:       #1A1310;
+  --bg-surface:        #241C18;
+  --border:            #2E2520;
+  --text-primary:      #E8DDD0;
+  --text-secondary:    #9A8E82;
+  --gold:              #C9A961;
+  --gold-dim:          #8A6F3A;
+  --gold-hi:           #D4B87A;
+  --gold-pale:         #E8D5A8;
+  --gold-glow:         rgba(201, 169, 97, 0.15);
+
+  /* RGB companions para alpha compositing en GSAP */
+  --bg-base-rgb:       10, 8, 7;
+  --gold-rgb:          201, 169, 97;
+  --text-primary-rgb:  232, 221, 208;
+
+  /* Semánticos (alineados con design-system) */
+  --text-accent:       #C9A961;
+  --text-inverse:      #0D0C0A;
+  --border-subtle:     rgba(201, 169, 110, 0.15);
+  --border-strong:     rgba(201, 169, 110, 0.35);
+  --border-active:     rgba(201, 169, 110, 0.70);
+  --gold-bg-subtle:    rgba(201, 169, 110, 0.08);
+  --gold-border-subtle: rgba(201, 169, 110, 0.20);
+  --bg-overlay:        rgba(13, 12, 10, 0.92);
+
+  /* ─── TIPOGRAFÍA ──────────────────────────────────────── */
+  /* next/font inyecta --font-cormorant y --font-inter en <html> */
+  --font-display: var(--font-cormorant), Georgia, serif;
+  --font-body:    var(--font-inter), system-ui, -apple-system, sans-serif;
+
+  /* Escala tipográfica — cinematic/editorial */
+  --text-xs:    0.6875rem;   /* 11px — labels, badges */
+  --text-sm:    0.8125rem;   /* 13px — texto apoyo */
+  --text-base:  clamp(0.9rem, 1vw, 1rem);
+  --text-lg:    clamp(1rem, 1.2vw, 1.125rem);
+  --text-xl:    clamp(1.125rem, 1.5vw, 1.25rem);
+  --text-2xl:   clamp(1.5rem, 2.5vw, 1.875rem);
+  --text-3xl:   clamp(2rem, 4vw, 2.5rem);
+  --text-4xl:   clamp(2.5rem, 5vw, 3.5rem);
+  --text-5xl:   clamp(3rem, 6vw, 4.5rem);
+  --text-6xl:   3.75rem;     /* 60px — hero mid */
+  --text-7xl:   4.5rem;      /* 72px — hero desktop */
+  --text-8xl:   6rem;        /* 96px — display máximo */
+  --text-9xl:   8rem;        /* 128px — stats oversized */
+  --text-hero:  clamp(3.5rem, 8vw, 6.5rem);
+
+  /* Line heights */
+  --leading-tight:   1.05;
+  --leading-snug:    1.25;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.65;
+
+  /* Letter spacing */
+  --tracking-tightest: -0.03em;
+  --tracking-tight:    -0.02em;
+  --tracking-normal:    0.01em;
+  --tracking-wide:      0.08em;
+  --tracking-wider:     0.12em;
+  --tracking-widest:    0.18em;
+
+  /* ─── SPACING ─────────────────────────────────────────── */
+  --space-1:   0.25rem;
+  --space-2:   0.5rem;
+  --space-3:   0.75rem;
+  --space-4:   1rem;
+  --space-6:   1.5rem;
+  --space-8:   2rem;
+  --space-10:  2.5rem;
+  --space-12:  3rem;
+  --space-16:  4rem;
+  --space-20:  5rem;
+  --space-24:  6rem;
+  --space-32:  8rem;
+  --space-40:  10rem;
+  --space-48:  12rem;
+  --space-section: clamp(4rem, 8vw, 8rem);
+
+  /* ─── BORDER RADIUS — angular elegante ───────────────── */
+  --radius-none: 0px;
+  --radius-xs:   1px;
+  --radius-sm:   2px;
+  --radius-base: 3px;
+  --radius-img:  2px;
+  --radius-full: 0px; /* CTAs rectangulares — diseño editorial */
+
+  /* ─── SHADOWS — warmth cinematográficas ──────────────── */
+  --shadow-sm:    0 1px 4px rgba(0, 0, 0, 0.4);
+  --shadow-md:    0 4px 16px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.3);
+  --shadow-lg:    0 8px 32px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-gold:  0 0 24px rgba(201, 169, 97, 0.25), 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-inset: inset 0 1px 0 rgba(232, 221, 208, 0.06);
+
+  /* ─── Z-INDEX ─────────────────────────────────────────── */
+  --z-below:   -1;
+  --z-base:     0;
+  --z-above:    10;
+  --z-overlay:  100;
+  --z-dropdown: 200;
+  --z-sticky:   300;
+  --z-nav:      400;
+  --z-modal:    500;
+  --z-toast:    600;
+
+  /* ─── MOTION — cinematic, deliberado ─────────────────── */
+  --ease-cinematic:  cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-out-expo:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart:  cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-quart:   cubic-bezier(0.5, 0, 0.75, 0);
+  --ease-smooth:     cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-hover:      cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  --dur-instant:    100ms;
+  --dur-fast:       200ms;
+  --dur-normal:     400ms;
+  --dur-slow:       700ms;
+  --dur-reveal:     1100ms;
+  --dur-cinematic:  1600ms;
+
+  --stagger-tight:  0.04s;
+  --stagger-normal: 0.08s;
+  --stagger-loose:  0.15s;
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  --container-sm:   640px;
+  --container-md:   768px;
+  --container-lg:   1024px;
+  --container-xl:   1280px;
+  --container-full: 100%;
+}
+
+/* ─────────────────────────────────────────────────────────
+   RESET BASE — mínimo y deliberado
+──────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  /* CRÍTICO: auto, NO smooth — Lenis controla el scroll */
+  scroll-behavior: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  line-height: var(--leading-relaxed);
+  min-height: 100dvh;
+}
+
+/* Imágenes responsive base */
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Safari focus fix */
+:where(button):focus:not(:focus-visible) {
+  outline: 0;
+}
+
+/* Focus visible global — branded con gold */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* Selección de texto — branded */
+::selection {
+  background-color: rgba(201, 169, 97, 0.25);
+  color: var(--text-primary);
+}
+
+/* Scrollbar — dark y warm (webkit) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ─────────────────────────────────────────────────────────
+   PLACEHOLDERS de galería — elegantes, no "roto"
+──────────────────────────────────────────────────────────── */
+.placeholder-img {
+  background: linear-gradient(
+    135deg,
+    var(--bg-elevated) 0%,
+    var(--bg-surface) 100%
+  );
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shimmer dorado para placeholders — consistente con warm gold */
+.placeholder-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 169, 97, 0.06) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer-gold 2s ease-in-out infinite;
+}
+
+@keyframes shimmer-gold {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ─────────────────────────────────────────────────────────
+   UTILITIES GLOBALES — usados en múltiples componentes
+──────────────────────────────────────────────────────────── */
+
+/* Contenedor principal del sitio */
+.container-xl {
+  width: 100%;
+  max-width: var(--container-xl);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .container-xl {
+    padding-inline: var(--space-8);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-xl {
+    padding-inline: var(--space-12);
+  }
+}
+
+/* Reduced motion — override para users con preferencia */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

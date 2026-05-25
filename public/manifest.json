@@ -1,0 +1,23 @@
+{
+  "name": "Carlos Gañan — Barbería Premium",
+  "short_name": "Carlos Gañan",
+  "description": "El detalle también comunica. Barbería premium en San Rafael, Mendoza.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0807",
+  "theme_color": "#C9A961",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

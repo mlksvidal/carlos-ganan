@@ -1,0 +1,116 @@
+# Carlos Gañan — Barbería Premium · San Rafael, Mendoza
+# Versión completa para crawlers de IA
+
+## Identidad
+
+**Nombre completo**: Carlos Gañan — Barbería Premium
+**Tipo de negocio**: BarberShop / Barbería masculina de alta gama
+**Propietario**: Carlos Gañan
+**Eslogan**: "El detalle también comunica."
+**Filosofía**: "No es solo un corte. Es tu presencia."
+
+## Ubicación física
+
+**Dirección**: San Lorenzo 269
+**Código postal**: M5600
+**Ciudad**: San Rafael
+**Provincia**: Mendoza
+**País**: Argentina
+**Google Maps**: https://www.google.com/maps/search/?api=1&query=San+Lorenzo+269%2C+San+Rafael%2C+Mendoza%2C+Argentina
+
+## Contacto
+
+**WhatsApp**: +54 9 2604 06-2206
+**Enlace directo**: https://wa.me/5492604062206
+**Método de reserva**: Exclusivamente por WhatsApp (no hay sistema de reserva online)
+
+## Horarios detallados
+
+| Día             | Horario          |
+|-----------------|------------------|
+| Lunes           | 10:00 – 20:00    |
+| Martes          | 10:00 – 20:00    |
+| Miércoles       | 10:00 – 20:00    |
+| Jueves          | 10:00 – 20:00    |
+| Viernes         | 10:00 – 20:00    |
+| Sábado          | 09:00 – 18:00    |
+| Domingo         | Cerrado          |
+
+## Servicios ofrecidos
+
+### I. Corte Clásico
+- **Descripción**: Corte preciso con tijera y máquina. Incluye lavado y secado.
+- **Duración estimada**: 45 minutos
+- **Ideal para**: quien busca un corte limpio y clásico con técnica refinada
+
+### II. Corte + Barba
+- **Descripción**: Corte de autor con perfilado de barba con navaja y arreglo definitivo.
+- **Duración estimada**: 60 minutos
+- **Ideal para**: experiencia completa de barbería masculina
+
+### III. Barba + Arreglo
+- **Descripción**: Definición, perfilado y acabado con navaja. Incluye toalla caliente.
+- **Duración estimada**: 30 minutos
+- **Ideal para**: quien ya tiene el corte hecho y solo necesita la barba
+
+### IV. Corte Niños
+- **Descripción**: Atención personalizada para los más jóvenes. Resultado impecable con paciencia.
+- **Duración estimada**: 30 minutos
+- **Ideal para**: niños que necesitan un primer corte o corte regular
+
+### V. Ritual Completo
+- **Descripción**: Corte, barba, tratamiento capilar y experiencia premium de salón completa.
+- **Duración estimada**: 60 minutos
+- **Ideal para**: quien quiere la experiencia completa de barbería de alta gama
+
+*Nota: Los precios no se publican online. Consultar vía WhatsApp.*
+
+## Métricas de confianza y trayectoria
+
+- **Años de experiencia**: 12+ años atendiendo en San Rafael
+- **Clientes atendidos**: 8.500+ clientes
+- **Puntuación promedio**: 4.9 estrellas
+- **Tasa de retorno**: 98% de clientes que regresan
+- **Área de servicio**: San Rafael y alrededores, Mendoza, Argentina
+
+## Preguntas frecuentes (FAQ)
+
+**¿Necesito turno previo?**
+Sí, se recomienda reservar turno por WhatsApp al +54 9 2604 06-2206. Carlos atiende con cita.
+
+**¿Cuánto cuesta un corte?**
+Los precios no se publican en el sitio web. Consultar directamente por WhatsApp para valores actualizados.
+
+**¿Atienden niños?**
+Sí. El servicio "Corte Niños" está diseñado para los más jóvenes con atención personalizada y paciencia.
+
+**¿Cuál es la dirección exacta?**
+San Lorenzo 269, M5600 San Rafael, Mendoza, Argentina. Ver en Google Maps: https://maps.google.com
+
+**¿Tienen Instagram o redes sociales?**
+No se listan redes sociales en el sitio oficial. El canal oficial de contacto es WhatsApp.
+
+**¿Abren los domingos?**
+No. Los domingos están cerrados. Horario: Lun-Vie 10:00-20:00, Sáb 09:00-18:00.
+
+**¿Qué incluye el Ritual Completo?**
+Corte de cabello, arreglo de barba con navaja, tratamiento capilar y la experiencia completa de salón. Duración aproximada: 60 minutos.
+
+## Propuesta de valor extendida
+
+Carlos Gañan es una barbería unipersonal de alta gama ubicada en San Rafael, Mendoza.
+Con más de 12 años de trayectoria, combina la técnica artesanal clásica con una estética
+editorial y cinematográfica. El espacio está diseñado para hombres que entienden que su
+imagen comunica algo — desde la primera impresión hasta el detalle final.
+
+No es un local de cortes rápidos. Es un espacio de confianza y precisión donde cada
+cliente recibe atención personalizada, sin apuro, con resultados que reflejan carácter.
+
+## Información técnica del sitio web
+
+- **Framework**: Next.js 16 (App Router)
+- **Idioma**: Español argentino (es-AR)
+- **Tipo de sitio**: Landing one-page estática
+- **URL del sitio**: https://carlos-ganan.vercel.app
+- **Sitemap**: https://carlos-ganan.vercel.app/sitemap.xml
+- **Fecha de última actualización**: 2026-05-25

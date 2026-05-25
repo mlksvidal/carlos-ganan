@@ -1,0 +1,185 @@
+{
+  "project": "carlos-ganan",
+  "version": 1,
+  "created_at": "2026-05-25",
+
+  "identity": {
+    "name": "Carlos Gañan",
+    "slogan": "El detalle también comunica.",
+    "slogan_eyebrow": "de pelos",
+    "slogan_full": "No es solo un corte. Es tu presencia.",
+    "tone": "premium, masculino, atemporal, artesanal",
+    "personality": ["preciso", "confiable", "refinado", "discreto", "cinematográfico"],
+    "target": "Hombres de 25-50 años que valoran el cuidado personal como expresión de identidad, no como vanidad. Buscan un espacio de confianza, no una fábrica de cortes.",
+    "location": "San Rafael, Mendoza, Argentina",
+    "voice": {
+      "formality": 2,
+      "complexity": 1,
+      "character": 2,
+      "emotion": 4
+    }
+  },
+
+  "colors": {
+    "primary": {
+      "hex": "#C9A961",
+      "use": "CTA principal, acento dorado, highlights, subrayados, punto final del tagline"
+    },
+    "secondary": {
+      "hex": "#E8DDD0",
+      "use": "Texto principal sobre fondo oscuro — beige cálido, no blanco puro"
+    },
+    "accent": {
+      "hex": "#8A6F3A",
+      "use": "Estado hover del dorado, versión atenuada del acento"
+    },
+    "neutral": {
+      "hex": "#1A1310",
+      "use": "Cards, nav scrolled, secciones alternadas — fondo elevado"
+    },
+    "text_dark": {
+      "hex": "#0A0807",
+      "use": "Fondo raíz — negro profundo con undertone café, texto inverso sobre dorado"
+    },
+    "text_light": {
+      "hex": "#E8DDD0",
+      "use": "Texto sobre fondos oscuros — beige cálido principal"
+    },
+    "_extended": {
+      "bg_surface": { "hex": "#241C18", "use": "Superficies de hover, inputs, overlays sutiles" },
+      "border": { "hex": "#2E2520", "use": "Separadores, divisores, bordes de cards" },
+      "text_secondary": { "hex": "#9A8E82", "use": "Labels, subtítulos, metadata, texto de apoyo" },
+      "gold_glow": { "value": "rgba(201,169,97,0.15)", "use": "Glow sutil en hover de botones CTA" }
+    }
+  },
+
+  "typography": {
+    "heading": {
+      "family": "Cormorant Garamond",
+      "weights": ["300", "400", "500", "600"],
+      "italic": true,
+      "source": "google_fonts",
+      "url": "https://fonts.google.com/specimen/Cormorant+Garamond",
+      "google_fonts_url": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap",
+      "use": "Todos los display, headlines de sección, frases de impacto, tagline. Itálica para énfasis — NUNCA bold para display, el peso light + italic ES la identidad",
+      "letter_spacing": "-0.02em",
+      "line_height": "1.05"
+    },
+    "body": {
+      "family": "Inter",
+      "weights": ["300", "400", "500"],
+      "source": "google_fonts",
+      "url": "https://fonts.google.com/specimen/Inter",
+      "use": "Body copy, UI labels, metadatos, botones CTA. Labels en uppercase con letter-spacing 0.12em",
+      "letter_spacing": "0.01em",
+      "line_height": "1.65"
+    },
+    "accent": {
+      "family": "Cormorant Garamond",
+      "weights": ["300"],
+      "italic": true,
+      "source": "google_fonts",
+      "url": "https://fonts.google.com/specimen/Cormorant+Garamond",
+      "use": "Tagline italic, firma del barber, frases de impacto en sección Presence, numeración de stats"
+    }
+  },
+
+  "asset_specs": {
+    "logo": {
+      "width": 800,
+      "height": 800,
+      "bg": "transparent",
+      "formats": ["SVG", "PNG"],
+      "variants": ["mark", "wordmark", "horizontal", "monogram"],
+      "primary_variant": "monogram",
+      "notes": "El monograma CG es el asset crítico. Ver logo_spec abajo para detalles."
+    }
+  },
+
+  "logo_spec": {
+    "concept": "Monograma editorial de alta barbería. Las letras C y G se componen con flourish sutil en sus terminales — serifa romana con contraste de trazo (grueso/fino) característico de tipografías de lujo siglo XIX. El monograma funciona como sello: compacto, simétrico, sin explicación.",
+    "style": "Serif editorial con alto contraste de trazo. Inspiración en marcas de barbería europea clásica y ateliers de moda masculina. NO vintage decadente — refinamiento sobrio.",
+    "color_primary": "#C9A961",
+    "color_background": "#0A0807",
+    "color_alternative_light": "#E8DDD0",
+    "letterforms": {
+      "C": "Serif romana clásica, apertura generosa, terminal superior con leve flourish hacia adentro",
+      "G": "Serif romana con espuela horizontal en la barra media, terminal inferior levemente curvado hacia afuera",
+      "composition": "C y G en ligadura o superposición axial. El 'spur' de la G puede cruzar la apertura de la C. Variante alternativa: C y G back-to-back especulares."
+    },
+    "do": [
+      "Contraste de trazo alto (ratio grueso/fino ≥ 3:1)",
+      "Serifa tipo romana clásica o transicional (no geométrica, no humanista)",
+      "Proporciones cuadradas o levemente verticales (no condensed)",
+      "Terminales con carácter — leve curvatura o flourish MUY sutil, no exagerado",
+      "Peso visual equilibrado entre C y G",
+      "Dorado sobre negro como colorway principal",
+      "Linework limpio — vectores perfectos sin ruido"
+    ],
+    "do_not": [
+      "Efectos 3D, sombras, biseles, gradientes múltiples",
+      "Decoración excesiva — floreos barrocos que compiten con la legibilidad",
+      "Serifa geométrica (Didot extremo, ultra-moderno)",
+      "Peso uniforme (monolineal) — el contraste es la identidad",
+      "Elementos gráficos externos al monograma (tijeras, peines, líneas decorativas alrededor)",
+      "Tipografía sans-serif",
+      "Border-radius en ningún elemento",
+      "Múltiples colores — máximo 2 (dorado + negro)"
+    ],
+    "variants_spec": {
+      "mark": "Solo el monograma CG en cuadrado 800×800px — uso para favicon, avatar, sello en packaging futuro",
+      "wordmark": "Solo el texto 'Carlos Gañan' en Cormorant Garamond Light, tracking 0.18em, sin el monograma. 1600×400px",
+      "horizontal": "Monograma CG a la izquierda + 'Carlos Gañan' en Cormorant Light a la derecha, separados por línea 1px dorada vertical. 1600×400px",
+      "monogram": "El mark CG inscrito en un rectángulo o círculo con borde dorado 1px. El container es optativo según ui-designer."
+    },
+    "file_outputs": {
+      "primary": "public/logo/logo-mark.svg",
+      "wordmark": "public/logo/logo-wordmark.svg",
+      "horizontal": "public/logo/logo-horizontal.svg",
+      "monogram_png_dark": "public/logo/monogram-dark.png",
+      "monogram_png_light": "public/logo/monogram-light.png",
+      "favicon": "public/favicon.svg"
+    },
+    "reference_moodboard": "/Users/lucas/Documents/carlos-ganan/references/Branding.png"
+  },
+
+  "prompt_ingredients": {
+    "style_tags": [
+      "luxury barbershop",
+      "editorial masculine",
+      "dark luxury",
+      "cinematic",
+      "warm gold accent",
+      "serif typography",
+      "monochrome warm tones",
+      "artisanal premium",
+      "atemporal",
+      "precision craft"
+    ],
+    "photo_style": "NOT APPLICABLE — no image-agent in this project. User will provide real photos.",
+    "logo_style": "High-contrast serif monogram CG, classical roman letterforms with hairline-to-thick stroke contrast, gold on deep black, editorial luxury barber aesthetic, clean vector linework, subtle terminal flourish, no decorative embellishments beyond the letterforms themselves",
+    "avoid_global": "gradients, shadows on logo, 3D effects, vintage distressed texture, rustic wood grain, polished chrome, neon, casual sans-serif, lowercase only, playful, cartoon, clipart, watermark, frame borders, excessive flourishes, barbershop pole stripes, scissors iconography around the monogram"
+  },
+
+  "brand_guardrails": {
+    "anti_patterns": [
+      "NO fondos blancos ni grises neutros en ninguna aplicación del logo",
+      "NO border-radius en elementos del logo",
+      "NO gradientes cromáticos — si se usa gradiente en el dorado, solo warmth muy sutil",
+      "NO tipografía sans en el wordmark — Cormorant Garamond es OBLIGATORIA",
+      "NO versiones outlined del texto en wordmark (solo filled)",
+      "NO escalar por debajo de 24px — el monograma pierde detalle de serifa",
+      "NO usar el logo sobre fondos con contraste insuficiente (mínimo 4.5:1 WCAG AA)"
+    ],
+    "minimum_sizes": {
+      "mark_px": 24,
+      "horizontal_px": 120,
+      "wordmark_px": 80
+    },
+    "color_usage": {
+      "dark_background": "Gold (#C9A961) sobre negro (#0A0807) — colorway principal",
+      "light_application": "Negro (#0A0807) sobre beige (#E8DDD0) — para impresión futura o fondo claro",
+      "monotone": "Solo --text-secondary (#9A8E82) si el dorado no es viable por contexto técnico"
+    }
+  }
+}

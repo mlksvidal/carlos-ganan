@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Fondo negro profundo -->
+  <rect width="1200" height="630" fill="#0A0807"/>
+  <!-- Gradiente decorativo dorado sutil -->
+  <defs>
+    <radialGradient id="goldGlow" cx="30%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#C9A961" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#C9A961" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="goldLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C9A961" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#C9A961" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#goldGlow)"/>
+  <!-- Línea dorada decorativa -->
+  <rect x="80" y="200" width="120" height="1" fill="url(#goldLine)"/>
+  <!-- Eyebrow -->
+  <text x="80" y="185" font-family="Georgia, serif" font-size="13" fill="#C9A961" letter-spacing="4" text-transform="uppercase">BARBERÍA PREMIUM · SAN RAFAEL, MENDOZA</text>
+  <!-- Título principal -->
+  <text x="80" y="280" font-family="Georgia, serif" font-size="72" font-weight="300" fill="#E8DDD0" letter-spacing="-1">Carlos Gañan</text>
+  <!-- Subtítulo -->
+  <text x="80" y="340" font-family="Georgia, serif" font-size="28" font-weight="300" font-style="italic" fill="#E8DDD0" opacity="0.8">El detalle también comunica.</text>
+  <!-- Divider -->
+  <rect x="80" y="380" width="60" height="1" fill="#C9A961" opacity="0.6"/>
+  <!-- Descripción -->
+  <text x="80" y="420" font-family="Arial, sans-serif" font-size="16" fill="#9A8E82" letter-spacing="1">San Lorenzo 269 · San Rafael, Mendoza, Argentina</text>
+  <!-- WhatsApp CTA -->
+  <rect x="80" y="460" width="220" height="46" fill="#C9A961" rx="0"/>
+  <text x="190" y="488" font-family="Arial, sans-serif" font-size="13" fill="#0A0807" font-weight="bold" text-anchor="middle" letter-spacing="2">RESERVAR TURNO</text>
+  <!-- Borde decorativo derecho -->
+  <rect x="1100" y="80" width="1" height="470" fill="#2E2520"/>
+</svg>
