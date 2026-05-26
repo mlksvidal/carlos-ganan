@@ -45,7 +45,7 @@ export function Footer() {
               width={200}
               height={56}
               className="object-contain w-auto h-auto mb-4"
-              style={{ maxWidth: '200px' }}
+              style={{ maxWidth: '200px', mixBlendMode: 'lighten' }}
             />
 
             <p

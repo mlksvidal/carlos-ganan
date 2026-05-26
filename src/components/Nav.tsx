@@ -196,7 +196,7 @@ export function Nav() {
               height={44}
               priority
               className="object-contain w-auto h-[36px] md:h-[44px]"
-              style={{ maxWidth: '160px' }}
+              style={{ maxWidth: '160px', mixBlendMode: 'lighten' }}
             />
           </a>
 
@@ -274,7 +274,7 @@ export function Nav() {
             width={130}
             height={36}
             className="object-contain w-auto h-[32px]"
-            style={{ maxWidth: '130px' }}
+            style={{ maxWidth: '130px', mixBlendMode: 'lighten' }}
           />
           <button
             type="button"
