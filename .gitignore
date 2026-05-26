@@ -42,3 +42,6 @@ next-env.d.ts
 
 # pipeline
 .pipeline/cost-tracking.json
+
+# Local Netlify folder
+.netlify
