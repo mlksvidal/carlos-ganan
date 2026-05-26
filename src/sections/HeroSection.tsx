@@ -302,8 +302,11 @@ export function HeroSection() {
           Mobile:  alineado bottom-center / bottom con padding
       ──────────────────────────────────────────────────────── */}
       <div
-        className="relative z-20 flex flex-col justify-end min-h-[100dvh] pb-16 md:pb-20 lg:pb-24 px-6 md:px-10 lg:px-16 xl:px-20"
-        style={{ paddingTop: 'clamp(5rem, 12vw, 6rem)' }}
+        className="relative z-20 flex flex-col justify-end min-h-[100dvh] pb-16 md:pb-20 lg:pb-24"
+        style={{
+          paddingTop: 'clamp(5rem, 12vw, 6rem)',
+          paddingInline: 'clamp(1.5rem, 6vw, 6rem)',
+        }}
       >
         <div className="max-w-[600px]">
 

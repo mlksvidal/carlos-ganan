@@ -40,12 +40,12 @@ export function Footer() {
           {/* ── Col 1 — Logo + tagline ── */}
           <div>
             <Image
-              src="/images/logo.png"
+              src="/images/logo-clean.png"
               alt="Carlos Gañan — Barbería de autor en San Rafael"
               width={200}
               height={56}
               className="object-contain w-auto h-auto mb-4"
-              style={{ maxWidth: '200px', mixBlendMode: 'lighten' }}
+              style={{ maxWidth: '200px' }}
             />
 
             <p

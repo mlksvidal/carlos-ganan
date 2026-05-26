@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -8,306 +9,121 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-/* ─── Scissors icon — inline SVG, monolínea 1.5px ───────────────────── */
-function ScissorsIcon({ size = 28 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="6" cy="6" r="3" />
-      <circle cx="6" cy="18" r="3" />
-      <line x1="20" y1="4" x2="8.12" y2="15.88" />
-      <line x1="14.47" y1="14.48" x2="20" y2="20" />
-      <line x1="8.12" y1="8.12" x2="12" y2="12" />
-    </svg>
-  );
-}
+/* ─── GallerySection — Instagram embed ──────────────────────────────────
+   Reemplaza la galería bento por el feed oficial de Instagram del cliente.
+   URL del perfil: https://www.instagram.com/carlosganan.charly/
 
-/* ─── Tipos y datos de galería ───────────────────────────────────────── */
+   Estructura:
+   - Eyebrow dorado "EN INSTAGRAM"
+   - H2 Cormorant: "El trabajo dice más que las palabras."
+   - Subtexto Inter
+   - iframe embed oficial de Instagram (sin token, gratis)
+   - Fallback si el iframe no carga (ad blocker / privacy mode)
+   - CTA link "Seguinos en Instagram →"
 
-interface GalleryItem {
-  /** Número 1-based para el futuro src de la imagen */
-  num: number;
-  /** Columnas en grid de 12 (desktop) */
-  colSpan: number;
-  /** Filas en grid de 6 (desktop) */
-  rowSpan: number;
-  /** Alt descriptivo para accesibilidad */
-  alt: string;
-  /** Solo primera imagen carga sin lazy */
-  priority: boolean;
-}
+   CSP: vercel.json tiene frame-src con https://www.instagram.com
+──────────────────────────────────────────────────────────────────────── */
 
-const GALLERY_ITEMS: GalleryItem[] = [
-  { num: 1, colSpan: 5, rowSpan: 2, alt: 'Trabajo de barbería — corte clásico', priority: true },
-  { num: 2, colSpan: 4, rowSpan: 3, alt: 'Detalle de fade perfecto', priority: false },
-  { num: 3, colSpan: 3, rowSpan: 4, alt: 'Texturizado y acabado', priority: false },
-  { num: 4, colSpan: 4, rowSpan: 3, alt: 'Barba perfilada con precisión', priority: false },
-  { num: 5, colSpan: 5, rowSpan: 4, alt: 'Corte moderno con degradé', priority: false },
-  { num: 6, colSpan: 3, rowSpan: 2, alt: 'Acabado final — resultado definitivo', priority: false },
-];
+const INSTAGRAM_HANDLE = 'carlosganan.charly';
+const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
+const INSTAGRAM_EMBED_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/embed`;
 
-/* ─── GalleryPlaceholder — elegante, no "roto" ───────────────────────── */
-
-function GalleryPlaceholder({
-  num,
-  alt,
-}: {
-  num: number;
-  alt: string;
-}) {
-  return (
-    /*
-     * TODO: cuando el usuario provea las fotos en /public/images/gallery/,
-     * reemplazar este placeholder por:
-     *
-     * import Image from 'next/image'
-     * <Image
-     *   src={`/images/gallery/0${num}.jpg`}
-     *   fill
-     *   alt={alt}
-     *   className="object-cover object-center transition-transform duration-[600ms] ease-[var(--ease-hover)] group-hover:scale-[1.03]"
-     *   sizes="(max-width: 768px) 50vw, 33vw"
-     * />
-     *
-     * Dejar el wrapper <div className="gallery-cell ..."> intacto — el parallax
-     * y el hover están aplicados en el contenedor, no en la imagen.
-     */
-    <div
-      className="absolute inset-0 placeholder-img flex items-center justify-center"
-      style={{ background: 'linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-surface) 60%)' }}
-      role="img"
-      aria-label={alt}
-    >
-      {/* Ícono central sutil */}
-      <span
-        style={{
-          color: 'var(--border-subtle)',
-          opacity: 0.5,
-          /* El shimmer ::after ya viene de la clase .placeholder-img en globals.css */
-        }}
-      >
-        <ScissorsIcon size={26} />
-      </span>
-
-      {/* Número de foto — debug/orientación, invisible en prod por opacidad mínima */}
-      <span
-        className="absolute bottom-3 right-3 font-display italic"
-        style={{
-          fontSize: 'var(--text-xs)',
-          color: 'var(--border-subtle)',
-          letterSpacing: '0.08em',
-          opacity: 0.4,
-          userSelect: 'none',
-        }}
-        aria-hidden="true"
-      >
-        0{num}
-      </span>
-    </div>
-  );
-}
-
-/* ─── GalleryCell — wrapper de cada ítem del bento ──────────────────── */
-
-interface GalleryCellProps {
-  item: GalleryItem;
-  /** ref callback para el parallax */
-  cellRef: (el: HTMLDivElement | null) => void;
-}
-
-function GalleryCell({ item, cellRef }: GalleryCellProps) {
-  return (
-    <div
-      ref={cellRef}
-      className="gallery-cell group relative overflow-hidden"
-      style={{
-        background: 'var(--bg-elevated)',
-        /* grid-column / grid-row se aplican solo en desktop via <style> nth-child */
-        cursor: 'default',
-      }}
-    >
-      {/* Contenido — placeholder (reemplazar con Image en producción) */}
-      <GalleryPlaceholder num={item.num} alt={item.alt} />
-
-      {/* Overlay oscuro en hover — CSS, no JS */}
-      <div
-        className="absolute inset-0 pointer-events-none transition-opacity duration-300"
-        style={{
-          background: 'rgba(10, 8, 7, 0.30)',
-          opacity: 0,
-          zIndex: 2,
-        }}
-        aria-hidden="true"
-        data-gallery-overlay
-      />
-    </div>
-  );
-}
-
-/* ─── GallerySection ─────────────────────────────────────────────────── */
-
-/**
- * GallerySection — galería bento asimétrica con parallax sutil.
- *
- * T11: Grid CSS 12 cols × 6 rows con alturas asimétricas según diseño.
- *      Desktop: 3 cols de contenido visual + header editorial.
- *      Mobile: 2 cols × 3 filas (stack limpio).
- *
- * T12: Parallax GSAP — translateY sutil (-20px / +20px) por celda.
- *      Solo desktop (gsap.matchMedia min-width: 1024px).
- *      ScrollTrigger scrub: 1.2 por celda.
- *      prefers-reduced-motion: skip.
- *
- * Hover en cada celda: scale(1.03) + brightness sobre overlay — CSS.
- *
- * LENIS COMPATIBILITY:
- * LenisProvider expone window.lenis y llama ScrollTrigger.update() en su RAF.
- * Los ScrollTriggers de esta sección funcionan sin scroller proxy adicional
- * porque ScrollTrigger.update() ya está llamado por Lenis en cada frame.
- */
 export function GallerySection() {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
-  const cellRefs = useRef<HTMLDivElement[]>([]);
+  const embedRef = useRef<HTMLDivElement>(null);
+  const [iframeError, setIframeError] = useState(false);
 
-  const setCellRef = (el: HTMLDivElement | null, i: number) => {
-    if (el) cellRefs.current[i] = el;
-  };
-
+  /* ── Scroll reveal — heading + embed ── */
   useEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReduced = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
 
     const ctx = gsap.context(() => {
+      if (prefersReduced) return;
 
-      /* ── Estado inicial para entrance reveals ── */
-      if (!prefersReduced) {
-        gsap.set(headingRef.current, { opacity: 0, y: 20 });
-        gsap.set(cellRefs.current, { opacity: 0, scale: 0.97 });
-      }
+      gsap.set(headingRef.current, { opacity: 0, y: 24 });
+      gsap.set(embedRef.current, { opacity: 0, y: 32 });
 
-      /* ── Heading reveal ── */
       ScrollTrigger.create({
         trigger: headingRef.current,
         start: 'top 85%',
         once: true,
         onEnter: () => {
-          if (prefersReduced) return;
           gsap.to(headingRef.current, {
             opacity: 1,
             y: 0,
             duration: 0.9,
             ease: 'expo.out',
           });
-        },
-        // Con reduced motion, el heading es visible desde el inicio (no se setea invisible)
-        onEnterBack: () => { /* noop */ },
-      });
-
-      /* ── Entrance de celdas en stagger ── */
-      if (!prefersReduced) {
-        ScrollTrigger.create({
-          trigger: gridRef.current,
-          start: 'top 80%',
-          once: true,
-          onEnter: () => {
-            gsap.to(cellRefs.current, {
-              opacity: 1,
-              scale: 1,
-              duration: 0.7,
-              ease: 'expo.out',
-              stagger: {
-                each: 0.12,
-                from: 'start',
-              },
-            });
-          },
-        });
-      }
-
-      /* ── Parallax sutil — solo desktop ── */
-      if (!prefersReduced) {
-        const mm = gsap.matchMedia();
-
-        mm.add('(min-width: 1024px)', () => {
-          /**
-           * Cada celda tiene un translateY sutil diferente según su posición.
-           * Los valores alternan entre positivo y negativo para crear
-           * el efecto de profundidad del bento.
-           *
-           * Rango: -20px a +20px (muy sutil — no debe distraer del contenido)
-           */
-          const parallaxOffsets = [-20, 12, -16, 20, -12, 16];
-
-          cellRefs.current.forEach((cell, i) => {
-            if (!cell) return;
-
-            const yTarget = parallaxOffsets[i] ?? -10;
-
-            gsap.fromTo(
-              cell,
-              { y: 0 },
-              {
-                y: yTarget,
-                ease: 'none',
-                scrollTrigger: {
-                  trigger: cell,
-                  start: 'top bottom',
-                  end: 'bottom top',
-                  scrub: 1.2,
-                },
-              }
-            );
+          gsap.to(embedRef.current, {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            ease: 'expo.out',
+            delay: 0.2,
           });
-
-          return () => {
-            // Cleanup matchMedia — GSAP lo maneja automáticamente
-          };
-        });
-      }
-
-      /* ── Hover overlay — JS para targeting preciso (complementa CSS) ── */
-      cellRefs.current.forEach((cell) => {
-        if (!cell) return;
-
-        const overlay = cell.querySelector('[data-gallery-overlay]') as HTMLElement | null;
-
-        const onEnter = () => {
-          if (overlay) gsap.to(overlay, { opacity: 1, duration: 0.3, ease: 'power1.out' });
-        };
-        const onLeave = () => {
-          if (overlay) gsap.to(overlay, { opacity: 0, duration: 0.35, ease: 'power1.in' });
-        };
-
-        cell.addEventListener('mouseenter', onEnter);
-        cell.addEventListener('mouseleave', onLeave);
-
-        // Cleanup almacenado en closure — GSAP context lo limpia
-        return () => {
-          cell.removeEventListener('mouseenter', onEnter);
-          cell.removeEventListener('mouseleave', onLeave);
-        };
+        },
       });
-
     }, sectionRef);
 
     return () => ctx.revert();
+  }, []);
+
+  /* ── Fallback: si el iframe tarda >6s y no envió señal, detectar bloqueador ── */
+  useEffect(() => {
+    /*
+     * Los iframes de Instagram no disparan onError cuando son bloqueados
+     * por extensiones (uBlock, Privacy Badger). Detectamos el estado via
+     * window.addEventListener('message') — Instagram envía postMessage al cargar.
+     * Si en 8s no recibimos mensaje, mostramos el fallback.
+     */
+    let loaded = false;
+
+    const handleMessage = (e: MessageEvent) => {
+      if (
+        typeof e.data === 'string' &&
+        e.data.includes('instagram') ||
+        (e.origin && e.origin.includes('instagram.com'))
+      ) {
+        loaded = true;
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
+    const timeout = setTimeout(() => {
+      if (!loaded) {
+        // Solo mostrar fallback si el iframe aún no está visible/cargado
+        // Verificamos si el iframe tiene contenido accesible
+        const iframe = sectionRef.current?.querySelector('iframe');
+        if (iframe) {
+          try {
+            // Si podemos acceder al contentDocument, cargó bien
+            void iframe.contentDocument;
+          } catch {
+            // Cross-origin blocked = cargó bien (es esperado)
+            loaded = true;
+          }
+        }
+        if (!loaded) {
+          setIframeError(true);
+        }
+      }
+    }, 8000);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      clearTimeout(timeout);
+    };
   }, []);
 
   return (
     <section
       ref={sectionRef}
       id="galeria"
-      aria-label="Galería de trabajos"
+      aria-label="Instagram de Carlos Gañan"
       style={{
         background: 'var(--bg-base)',
         padding: 'var(--space-section) 0',
@@ -330,10 +146,10 @@ export function GallerySection() {
             marginBottom: 'var(--space-4)',
           }}
         >
-          Resultados que hablan
+          En Instagram
         </p>
 
-        {/* H2 display Cormorant */}
+        {/* H2 Cormorant */}
         <h2
           className="font-display font-light"
           style={{
@@ -341,162 +157,157 @@ export function GallerySection() {
             lineHeight: 'var(--leading-tight)',
             letterSpacing: 'var(--tracking-tight)',
             color: 'var(--text-primary)',
-            maxWidth: '22ch',
+            maxWidth: '26ch',
+            marginBottom: 'var(--space-4)',
           }}
         >
           El trabajo dice más que las palabras
-          <span
-            aria-hidden="true"
-            style={{ color: 'var(--gold)' }}
-          >
+          <span aria-hidden="true" style={{ color: 'var(--gold)' }}>
             .
           </span>
         </h2>
-      </div>
 
-      {/* ── Bento grid ── */}
-      {/*
-        DESKTOP: CSS Grid 12 columnas × base de 80px de fila.
-        Cada celda ocupa colSpan/rowSpan definidos en GALLERY_ITEMS.
-        Total lógico: 12 cols × 6 rows = área completa del bento.
-
-        Layout visual:
-        ┌─────────────────────┬────────────────┬──────────────┐
-        │  Foto 1             │  Foto 2        │  Foto 3      │
-        │  col-span-5 row-3   │  col-span-4 r2 │  col-span-3  │
-        │                     ├────────────────┤  row-span-3  │
-        │                     │  Foto 4        │              │
-        ├─────────────────────┤  col-span-4 r3 ├──────────────┤
-        │  Foto 5             │                │  Foto 6      │
-        │  col-span-5 row-3   │                │  col-span-3  │
-        │                     │                │  row-span-3  │
-        └─────────────────────┴────────────────┴──────────────┘
-
-        MOBILE: 2 columnas × stack natural. Las celdas se redistribuyen
-        ignorando el bento asimétrico para lectura lineal.
-      */}
-
-      {/* Wrapper: padding lateral en desktop, edge-to-edge en mobile */}
-      <div
-        style={{
-          paddingInline: 'clamp(0px, 4vw, 3rem)',
-        }}
-      >
-        {/* Grid container */}
-        <div
-          ref={gridRef}
-          className="gallery-grid"
+        {/* Subtexto */}
+        <p
           style={{
-            /* Mobile: 2 cols simples */
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gridAutoRows: '140px',
-            gap: '4px',
+            fontFamily: 'var(--font-body)',
+            fontSize: 'var(--text-base)',
+            color: 'var(--text-secondary)',
+            fontWeight: 300,
+            lineHeight: 1.7,
+            maxWidth: '42ch',
           }}
         >
-          {/* Mobile: todas las celdas son 1 col × 1 row */}
-          {/* Desktop: bento asimétrico via style inline por celda */}
-          {GALLERY_ITEMS.map((item, i) => (
-            <GalleryCell
-              key={item.num}
-              item={item}
-              cellRef={(el) => setCellRef(el, i)}
-            />
-          ))}
-        </div>
+          Cada corte, cada detalle, cada cliente. Mirá el día a día.
+        </p>
       </div>
 
-      {/* ── CSS para override de desktop — bento asimétrico ── */}
-      {/*
-        Las clases de CSS Grid (gridColumn/gridRow) en cada celda se aplican
-        con style inline en desktop vía la media query de este style tag.
-        Usamos un <style> scoped para no ensuciar globals.css.
-      */}
-      <style>{`
-        /* ── Mobile: garantizar 2 cols × 1 row por celda ── */
-        /* (sin media query = default desde el style inline del grid) */
-        @media (max-width: 1023px) {
-          .gallery-grid .gallery-cell {
-            grid-column: span 1 !important;
-            grid-row: span 1 !important;
-          }
-        }
+      {/* ── Embed de Instagram ── */}
+      <div
+        ref={embedRef}
+        className="container-xl"
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--space-8)' }}
+      >
+        {/* Iframe embed — visible cuando no hay error */}
+        {!iframeError ? (
+          <div
+            style={{
+              width: '100%',
+              maxWidth: '430px',
+              border: '1px solid var(--gold)',
+              lineHeight: 0, /* evitar espacio blanco debajo del iframe */
+            }}
+          >
+            <iframe
+              src={INSTAGRAM_EMBED_URL}
+              width="430"
+              height="560"
+              frameBorder="0"
+              scrolling="no"
+              allowTransparency
+              title="Instagram de Carlos Gañan"
+              loading="lazy"
+              style={{
+                display: 'block',
+                width: '100%',
+                maxWidth: '430px',
+                height: '560px',
+                border: 'none',
+              }}
+              onError={() => setIframeError(true)}
+            />
+          </div>
+        ) : (
+          /* ── Fallback — visible si ad blocker / privacy mode bloquea el iframe ── */
+          <div
+            role="img"
+            aria-label="Feed de Instagram de Carlos Gañan — ver perfil para las fotos completas"
+            style={{
+              width: '100%',
+              maxWidth: '430px',
+              border: '1px solid var(--border)',
+              background: 'var(--bg-elevated)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '1.5rem',
+              padding: '3rem 2rem',
+              textAlign: 'center',
+            }}
+          >
+            {/* Logo circular como elemento visual */}
+            <div style={{ opacity: 0.85 }}>
+              <Image
+                src="/images/logo-clean.png"
+                alt="Carlos Gañan"
+                width={120}
+                height={50}
+                style={{ objectFit: 'contain', filter: 'brightness(0.9)' }}
+              />
+            </div>
 
-        /* ── Desktop: bento asimétrico 12 cols × 80px rows ── */
-        @media (min-width: 1024px) {
-          .gallery-grid {
-            grid-template-columns: repeat(12, 1fr) !important;
-            grid-auto-rows: 80px !important;
-            gap: 8px !important;
-          }
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--text-sm)',
+                color: 'var(--text-secondary)',
+                fontWeight: 300,
+                lineHeight: 1.6,
+                maxWidth: '28ch',
+              }}
+            >
+              El contenido de Instagram no pudo cargarse.
+              <br />
+              Visitá el perfil directamente.
+            </p>
+          </div>
+        )}
 
-          /* Foto 1: izquierda alta corta — col-5, row-2 = 160px */
-          .gallery-grid .gallery-cell:nth-child(1) {
-            grid-column: span 5;
-            grid-row: span 2;
-          }
+        {/* ── CTA — link a Instagram ── */}
+        <a
+          href={INSTAGRAM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex items-center gap-2"
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: 'var(--text-sm)',
+            color: 'var(--gold)',
+            textDecoration: 'underline',
+            textDecorationColor: 'rgba(201, 169, 97, 0.4)',
+            textUnderlineOffset: '4px',
+            letterSpacing: '0.04em',
+            transition: 'text-decoration-color 200ms ease, opacity 200ms ease',
+          }}
+          aria-label="Ver perfil de Instagram de Carlos Gañan — se abre en nueva pestaña"
+        >
+          Seguinos en Instagram
+          <span
+            aria-hidden="true"
+            style={{
+              display: 'inline-block',
+              transition: 'transform 300ms cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+            className="group-hover:translate-x-1"
+          >
+            →
+          </span>
+        </a>
+      </div>
 
-          /* Foto 2: centro media — col-4, row-3 = 240px */
-          .gallery-grid .gallery-cell:nth-child(2) {
-            grid-column: span 4;
-            grid-row: span 3;
-          }
-
-          /* Foto 3: derecha alta — col-3, row-4 = 320px */
-          .gallery-grid .gallery-cell:nth-child(3) {
-            grid-column: span 3;
-            grid-row: span 4;
-          }
-
-          /* Foto 4: centro media — col-4, row-3 = 240px */
-          .gallery-grid .gallery-cell:nth-child(4) {
-            grid-column: span 4;
-            grid-row: span 3;
-          }
-
-          /* Foto 5: izquierda alta — col-5, row-4 = 320px */
-          .gallery-grid .gallery-cell:nth-child(5) {
-            grid-column: span 5;
-            grid-row: span 4;
-          }
-
-          /* Foto 6: derecha corta — col-3, row-2 = 160px */
-          .gallery-grid .gallery-cell:nth-child(6) {
-            grid-column: span 3;
-            grid-row: span 2;
-          }
-        }
-
-        /* ── Hover: scale + brightness en placeholder ── */
-        .gallery-cell .placeholder-img {
-          transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1), filter 300ms ease;
-          will-change: transform;
-        }
-        .gallery-cell:hover .placeholder-img {
-          transform: scale(1.03);
-          filter: brightness(1.06);
-        }
-
-        /* ── Hover: scale + brightness en imágenes reales ── */
-        .gallery-cell img {
-          transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1), filter 300ms ease;
-          will-change: transform;
-        }
-        .gallery-cell:hover img {
-          transform: scale(1.03);
-          filter: brightness(1.06);
-        }
-
-        /* ── prefers-reduced-motion: sin scale ni transitions ── */
-        @media (prefers-reduced-motion: reduce) {
-          .gallery-cell,
-          .gallery-cell img,
-          .gallery-cell .placeholder-img {
-            transform: none !important;
-            transition: none !important;
-          }
-        }
-      `}</style>
+      {/* ── Accesibilidad: noscript fallback ── */}
+      <noscript>
+        <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>
+          <p>
+            Para ver el feed de Instagram,{' '}
+            <a href={INSTAGRAM_URL} rel="noopener noreferrer" style={{ color: 'var(--gold)' }}>
+              visitá el perfil de @{INSTAGRAM_HANDLE}
+            </a>
+            .
+          </p>
+        </div>
+      </noscript>
     </section>
   );
 }

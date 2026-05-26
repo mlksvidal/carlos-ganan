@@ -11,7 +11,7 @@ import { BUSINESS_NAME } from '@/lib/constants';
 
 const NAV_LINKS = [
   { href: '#servicios', label: 'Servicios' },
-  { href: '#galeria', label: 'Galería' },
+  { href: '#galeria', label: 'Instagram' },
   { href: '#ubicacion', label: 'Ubicación' },
   { href: '#contacto', label: 'Contacto' },
 ] as const;
@@ -190,13 +190,13 @@ export function Nav() {
             aria-label={`${BUSINESS_NAME} — Barbería de autor en San Rafael — ir al inicio`}
           >
             <Image
-              src="/images/logo.png"
+              src="/images/logo-clean.png"
               alt="Carlos Gañan — Barbería de autor en San Rafael"
               width={160}
               height={44}
               priority
               className="object-contain w-auto h-[36px] md:h-[44px]"
-              style={{ maxWidth: '160px', mixBlendMode: 'lighten' }}
+              style={{ maxWidth: '160px' }}
             />
           </a>
 
@@ -269,12 +269,12 @@ export function Nav() {
         {/* Header del drawer */}
         <div className="flex items-center justify-between px-6 h-[72px] border-b border-[var(--border)]">
           <Image
-            src="/images/logo.png"
+            src="/images/logo-clean.png"
             alt="Carlos Gañan — Barbería de autor en San Rafael"
             width={130}
             height={36}
             className="object-contain w-auto h-[32px]"
-            style={{ maxWidth: '130px', mixBlendMode: 'lighten' }}
+            style={{ maxWidth: '130px' }}
           />
           <button
             type="button"
