@@ -46,6 +46,11 @@ function ScissorsIcon() {
  * @returns Array de HTMLElement spans animables (sin espacios)
  */
 function splitCharsDom(el: HTMLElement): HTMLElement[] {
+  /* Idempotencia: si ya se splitó, devolver los .char-span existentes */
+  if (el.dataset.splitDone === 'true') {
+    return Array.from(el.querySelectorAll<HTMLElement>('.char-span'));
+  }
+
   const originalText = el.textContent ?? '';
 
   // Guardar accesibilidad — lector de pantalla lee el texto completo
@@ -65,6 +70,7 @@ function splitCharsDom(el: HTMLElement): HTMLElement[] {
       el.appendChild(document.createTextNode(' ')); // Non-breaking space
     } else {
       const span = document.createElement('span');
+      span.className = 'char-span';
       span.setAttribute('aria-hidden', 'true');
       span.style.cssText =
         'display: inline-block; will-change: transform, opacity;';
@@ -74,6 +80,7 @@ function splitCharsDom(el: HTMLElement): HTMLElement[] {
     }
   }
 
+  el.dataset.splitDone = 'true';
   return charEls;
 }
 
@@ -96,51 +103,51 @@ function splitCharsDom(el: HTMLElement): HTMLElement[] {
 export function InterludeSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const phraseRef = useRef<HTMLHeadingElement>(null);
+  const animatedRef = useRef(false);
 
   useEffect(() => {
-    const prefersReduced = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
+    if (animatedRef.current) return;
+    animatedRef.current = true;
 
-    if (prefersReduced) {
-      if (phraseRef.current) {
-        gsap.set(phraseRef.current, { opacity: 1 });
+    const ctx = gsap.context(() => {
+      const phraseEl = phraseRef.current;
+      const prefersReduced = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches;
+
+      if (prefersReduced) {
+        if (phraseEl) gsap.set(phraseEl, { opacity: 1 });
+        return;
       }
-      return;
-    }
 
-    if (!phraseRef.current || !sectionRef.current) return;
+      if (!phraseEl || !sectionRef.current) return;
 
-    /* ── Split chars en DOM — después de que React renderizó ── */
-    const charEls = splitCharsDom(phraseRef.current);
+      /* splitCharsDom es idempotente — guard data-split-done */
+      const charEls = splitCharsDom(phraseEl);
 
-    // El último char es el punto final → color dorado
-    if (charEls.length > 0) {
-      charEls[charEls.length - 1].style.color = 'var(--gold)';
-    }
+      if (charEls.length > 0) {
+        charEls[charEls.length - 1].style.color = 'var(--gold)';
+      }
 
-    // Estado inicial oculto
-    gsap.set(charEls, { opacity: 0, y: 40 });
+      gsap.set(charEls, { opacity: 0, y: 40 });
 
-    /* ── ScrollTrigger — una sola vez al entrar ── */
-    const st = ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: 'top 70%',
-      once: true,
-      onEnter: () => {
-        gsap.to(charEls, {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: 'expo.out',
-          stagger: 0.03, // 30ms por carácter
-        });
-      },
-    });
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: 'top 70%',
+        once: true,
+        onEnter: () => {
+          gsap.to(charEls, {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'expo.out',
+            stagger: 0.03,
+          });
+        },
+      });
+    }, sectionRef);
 
-    return () => {
-      st.kill();
-    };
+    void ctx;
   }, []);
 
   return (

@@ -129,11 +129,17 @@ export function GallerySection() {
         padding: 'var(--space-section) 0',
       }}
     >
-      {/* ── Header editorial ── */}
+      {/* ── Header editorial — centrado ── */}
       <div
         ref={headingRef}
         className="container-xl"
-        style={{ marginBottom: 'var(--space-10)' }}
+        style={{
+          marginBottom: 'var(--space-10)',
+          textAlign: 'center',
+          maxWidth: '720px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+        }}
       >
         {/* Eyebrow */}
         <p
@@ -157,7 +163,6 @@ export function GallerySection() {
             lineHeight: 'var(--leading-tight)',
             letterSpacing: 'var(--tracking-tight)',
             color: 'var(--text-primary)',
-            maxWidth: '26ch',
             marginBottom: 'var(--space-4)',
           }}
         >
@@ -176,6 +181,8 @@ export function GallerySection() {
             fontWeight: 300,
             lineHeight: 1.7,
             maxWidth: '42ch',
+            marginLeft: 'auto',
+            marginRight: 'auto',
           }}
         >
           Cada corte, cada detalle, cada cliente. Mirá el día a día.

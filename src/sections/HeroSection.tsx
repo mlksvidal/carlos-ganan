@@ -23,6 +23,12 @@ if (typeof window !== 'undefined') {
 ──────────────────────────────────────────────────────────────────── */
 
 function splitWordsDom(el: HTMLElement): HTMLElement[] {
+  /* Idempotencia: si ya se splitó, devolver los .word-inner existentes.
+     Evita duplicación cuando useEffect re-ejecuta (strict mode, HMR, re-render). */
+  if (el.dataset.splitDone === 'true') {
+    return Array.from(el.querySelectorAll<HTMLElement>('.word-inner'));
+  }
+
   const originalText = el.textContent ?? '';
   const originalHTML = el.innerHTML;
 
@@ -67,6 +73,7 @@ function splitWordsDom(el: HTMLElement): HTMLElement[] {
     wordEls.push(inner);
   });
 
+  el.dataset.splitDone = 'true';
   return wordEls;
 }
 
@@ -100,130 +107,113 @@ export function HeroSection() {
   const ctaRef = useRef<HTMLDivElement>(null);
   const subtextRef = useRef<HTMLParagraphElement>(null);
   const photoRef = useRef<HTMLDivElement>(null);
+  /* Flag que garantiza que el setup de animaciones se ejecuta UNA VEZ */
+  const animatedRef = useRef(false);
 
   useEffect(() => {
-    const prefersReduced = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
+    /* Hard guard contra ejecución doble (strict mode, HMR, re-renders) */
+    if (animatedRef.current) return;
+    animatedRef.current = true;
 
-    if (prefersReduced) {
-      const els = [
-        eyebrowRef.current,
-        h1Ref.current,
-        leadRef.current,
-        ctaRef.current,
-        subtextRef.current,
-      ].filter(Boolean);
-      gsap.set(els, { opacity: 1, y: 0 });
-      return;
-    }
+    const ctx = gsap.context(() => {
+      const prefersReduced = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches;
 
-    /* ── Ocultar todos los elementos antes de animar ── */
-    gsap.set(
-      [
-        eyebrowRef.current,
-        leadRef.current,
-        ctaRef.current,
-        subtextRef.current,
-      ],
-      { opacity: 0, y: 20 }
-    );
-
-    /* ── SplitText manual en H1 ── */
-    let wordInners: HTMLElement[] = [];
-    if (h1Ref.current) {
-      wordInners = splitWordsDom(h1Ref.current);
-      gsap.set(wordInners, { y: '100%' });
-      if (wordInners.length > 0) {
-        wordInners[wordInners.length - 1].style.color = 'var(--gold)';
+      if (prefersReduced) {
+        const els = [
+          eyebrowRef.current,
+          h1Ref.current,
+          leadRef.current,
+          ctaRef.current,
+          subtextRef.current,
+        ].filter(Boolean);
+        gsap.set(els, { opacity: 1, y: 0 });
+        if (h1Ref.current) {
+          const wIs = h1Ref.current.querySelectorAll<HTMLElement>('.word-inner');
+          gsap.set(wIs, { y: '0%' });
+        }
+        return;
       }
-    }
 
-    /* ── Timeline principal — page load ── */
-    const tl = gsap.timeline({ delay: 0.3 });
+      /* SplitText manual — idempotente (data-split-done="true" guard) */
+      let wordInners: HTMLElement[] = [];
+      if (h1Ref.current) {
+        wordInners = splitWordsDom(h1Ref.current);
+        if (wordInners.length > 0) {
+          wordInners[wordInners.length - 1].style.color = 'var(--gold)';
+        }
+      }
 
-    tl.to(eyebrowRef.current, {
-      opacity: 1,
-      y: 0,
-      duration: 0.6,
-      ease: 'expo.out',
-    });
-
-    if (wordInners.length > 0) {
-      tl.to(
-        wordInners,
-        {
-          y: '0%',
-          duration: 1.2,
-          ease: 'expo.out',
-          stagger: 0.06,
-        },
-        '-=0.3'
+      /* Estado inicial de TODOS los elementos animables */
+      gsap.set(
+        [
+          eyebrowRef.current,
+          leadRef.current,
+          ctaRef.current,
+          subtextRef.current,
+        ],
+        { opacity: 0, y: 20 }
       );
-    }
+      if (wordInners.length > 0) {
+        gsap.set(wordInners, { y: '100%' });
+      }
 
-    tl.to(
-      leadRef.current,
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.7,
-        ease: 'power2.out',
-      },
-      '-=0.6'
-    );
+      /* Timeline principal */
+      const tl = gsap.timeline({ delay: 0.3 });
 
-    tl.to(
-      ctaRef.current,
-      {
+      tl.to(eyebrowRef.current, {
         opacity: 1,
         y: 0,
         duration: 0.6,
-        ease: 'power2.out',
-      },
-      '-=0.4'
-    );
-
-    tl.to(
-      subtextRef.current,
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.5,
-        ease: 'power2.out',
-      },
-      '-=0.3'
-    );
-
-    /* ── Parallax imagen — solo desktop ── */
-    const mm = gsap.matchMedia();
-
-    mm.add('(min-width: 1024px)', () => {
-      if (!photoRef.current || !sectionRef.current) return;
-
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 1.5,
-        onUpdate: (self) => {
-          if (photoRef.current) {
-            gsap.set(photoRef.current, {
-              y: `${self.progress * -15}%`,
-            });
-          }
-        },
+        ease: 'expo.out',
       });
 
-      return () => {
-        ScrollTrigger.getAll().forEach((t) => t.kill());
-      };
-    });
+      if (wordInners.length > 0) {
+        tl.to(
+          wordInners,
+          { y: '0%', duration: 1.2, ease: 'expo.out', stagger: 0.06 },
+          '-=0.3'
+        );
+      }
 
-    return () => {
-      tl.kill();
-      mm.revert();
-    };
+      tl.to(
+        leadRef.current,
+        { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' },
+        '-=0.6'
+      );
+      tl.to(
+        ctaRef.current,
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+        '-=0.4'
+      );
+      tl.to(
+        subtextRef.current,
+        { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
+        '-=0.3'
+      );
+
+      /* Parallax imagen — solo desktop ≥1024px */
+      const mm = gsap.matchMedia();
+      mm.add('(min-width: 1024px)', () => {
+        if (!photoRef.current || !sectionRef.current) return;
+        ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.5,
+          onUpdate: (self) => {
+            if (photoRef.current) {
+              gsap.set(photoRef.current, { y: `${self.progress * -15}%` });
+            }
+          },
+        });
+      });
+    }, sectionRef);
+
+    /* NO cleanup — el ref flag garantiza que solo se ejecuta una vez.
+       En unmount real (navegación SPA), GSAP cancela animaciones huérfanas. */
+    void ctx;
   }, []);
 
   return (
@@ -255,8 +245,8 @@ export function HeroSection() {
           fill
           priority
           sizes="100vw"
-          className="hidden md:block object-cover object-center"
-          style={{ objectPosition: 'center right' }}
+          className="hidden md:block object-cover"
+          style={{ objectPosition: 'center center' }}
         />
         {/* Mobile: hero vertical */}
         <Image
