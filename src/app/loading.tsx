@@ -19,7 +19,7 @@ export default function Loading() {
         style={{ fontSize: 'var(--text-xs)', opacity: 0.6 }}
         aria-hidden="true"
       >
-        Barbería Premium · San Rafael
+        Barbería de autor en San Rafael
       </p>
 
       {/* Wordmark con shimmer — animación CSS pura, sin deps */}

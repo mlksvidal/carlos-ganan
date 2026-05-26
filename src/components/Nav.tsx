@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
+import Image from 'next/image';
 import { X, Menu } from 'lucide-react';
 import { clsx } from 'clsx';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
@@ -177,29 +178,26 @@ export function Nav() {
           className="container-xl flex items-center justify-between h-[72px] md:h-[80px]"
           aria-label="Navegación principal"
         >
-          {/* ── Wordmark izquierda ── */}
+          {/* ── Logo izquierda ── */}
           <a
             href="#"
             className={clsx(
-              'flex flex-col leading-none',
+              'flex items-center',
               'transition-opacity duration-[200ms] ease-[var(--ease-hover)]',
               'hover:opacity-80',
               'focus-visible:outline-2 focus-visible:outline-[var(--gold-pale)] focus-visible:outline-offset-4',
             )}
-            aria-label={`${BUSINESS_NAME} — ir al inicio`}
+            aria-label={`${BUSINESS_NAME} — Barbería de autor en San Rafael — ir al inicio`}
           >
-            <span
-              className="text-[var(--text-primary)] font-display font-light tracking-[var(--tracking-tight)]"
-              style={{ fontSize: 'clamp(1rem, 2vw, 1.125rem)' }}
-            >
-              {BUSINESS_NAME}
-            </span>
-            <span
-              className="text-[var(--gold)] font-display italic font-light tracking-[0.04em]"
-              style={{ fontSize: 'clamp(0.6875rem, 1.2vw, 0.75rem)' }}
-            >
-              de pelos
-            </span>
+            <Image
+              src="/images/logo.png"
+              alt="Carlos Gañan — Barbería de autor en San Rafael"
+              width={160}
+              height={44}
+              priority
+              className="object-contain w-auto h-[36px] md:h-[44px]"
+              style={{ maxWidth: '160px' }}
+            />
           </a>
 
           {/* ── Links centro — solo desktop ── */}
@@ -270,12 +268,14 @@ export function Nav() {
       >
         {/* Header del drawer */}
         <div className="flex items-center justify-between px-6 h-[72px] border-b border-[var(--border)]">
-          <span
-            className="text-[var(--text-primary)] font-display font-light"
-            style={{ fontSize: '1rem' }}
-          >
-            {BUSINESS_NAME}
-          </span>
+          <Image
+            src="/images/logo.png"
+            alt="Carlos Gañan — Barbería de autor en San Rafael"
+            width={130}
+            height={36}
+            className="object-contain w-auto h-[32px]"
+            style={{ maxWidth: '130px' }}
+          />
           <button
             type="button"
             className={clsx(
@@ -348,7 +348,7 @@ export function Nav() {
           <p
             className="text-[var(--text-secondary)] font-display italic font-light text-sm opacity-60"
           >
-            de pelos
+            Barbería de autor
           </p>
         </div>
       </div>

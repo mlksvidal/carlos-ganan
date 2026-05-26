@@ -10,7 +10,7 @@
 export const BUSINESS_NAME = 'Carlos Gañan' as const;
 export const BUSINESS_TAGLINE = 'El detalle también comunica.' as const;
 export const BUSINESS_SLOGAN = 'No es solo un corte. Es tu presencia.' as const;
-export const BUSINESS_EYEBROW = 'Barbería Premium · San Rafael' as const;
+export const BUSINESS_EYEBROW = 'Barbería de autor en San Rafael' as const;
 export const BUSINESS_LOCATION = 'San Rafael, Mendoza, Argentina' as const;
 
 /* ─── Contacto ─────────────────────────────────────────────────────── */

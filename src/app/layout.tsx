@@ -21,9 +21,9 @@ import "./globals.css";
 const localBusinessJsonLd = {
   "@context": "https://schema.org",
   "@type": "BarberShop",
-  name: "Carlos Gañan — Barbería Premium",
+  name: "Carlos Gañan — Barbería de autor en San Rafael",
   description:
-    "Barbería premium en San Rafael, Mendoza. Cortes clásicos, arreglo de barba y experiencia de alta precisión artesanal. Más de 12 años de trayectoria.",
+    "Barbería de autor en San Rafael, Mendoza. Cortes clásicos, arreglo de barba y experiencia de alta precisión artesanal. Más de 12 años de trayectoria.",
   url: "https://carlos-ganan.vercel.app", // TODO: reemplazar por dominio final
   telephone: "+54-9-2604-06-2206",
   priceRange: "$$$",
@@ -105,9 +105,9 @@ const inter = Inter({
  * openGraph.url y la constante localBusinessJsonLd.url.
  */
 export const metadata: Metadata = {
-  title: "Barbería Carlos Gañan · San Rafael, Mendoza | Cortes Premium",
+  title: "Carlos Gañan — Barbería de autor en San Rafael, Mendoza",
   description:
-    "Barbería premium en San Rafael, Mendoza. Cortes clásicos, arreglo de barba y experiencia artesanal de alta precisión. Reservá tu turno por WhatsApp.",
+    "Barbería de autor en San Rafael, Mendoza. Cortes clásicos, arreglo de barba y experiencia artesanal de alta precisión. Reservá tu turno por WhatsApp.",
   keywords: [
     "barbería premium San Rafael",
     "barbero San Rafael Mendoza",
@@ -128,10 +128,10 @@ export const metadata: Metadata = {
     locale: "es_AR",
     // TODO: reemplazar por dominio final post-deploy
     url: "https://carlos-ganan.vercel.app",
-    siteName: "Carlos Gañan — Barbería Premium",
-    title: "Barbería Carlos Gañan · San Rafael, Mendoza | Cortes Premium",
+    siteName: "Carlos Gañan — Barbería de autor en San Rafael",
+    title: "Carlos Gañan — Barbería de autor en San Rafael, Mendoza",
     description:
-      "Barbería premium en San Rafael, Mendoza. Cortes clásicos, arreglo de barba y experiencia artesanal de alta precisión. Reservá tu turno por WhatsApp.",
+      "Barbería de autor en San Rafael, Mendoza. Cortes clásicos, arreglo de barba y experiencia artesanal de alta precisión. Reservá tu turno por WhatsApp.",
     // OG image generada dinámicamente por /src/app/opengraph-image.tsx
     // Next.js la resuelve automáticamente — no necesita declararse aquí explícitamente.
     // Si necesitás forzar una URL absoluta estática (ej. para preview local),
@@ -140,9 +140,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Barbería Carlos Gañan · San Rafael, Mendoza | Cortes Premium",
+    title: "Carlos Gañan — Barbería de autor en San Rafael, Mendoza",
     description:
-      "Barbería premium en San Rafael, Mendoza. Cortes clásicos y arreglo de barba. Reservá tu turno por WhatsApp.",
+      "Barbería de autor en San Rafael, Mendoza. Cortes clásicos y arreglo de barba. Reservá tu turno por WhatsApp.",
     // Twitter image también resuelta automáticamente desde opengraph-image.tsx
   },
   robots: {
@@ -155,10 +155,11 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  // favicon e icon.png son detectados automáticamente por Next.js desde src/app/icon.png
+  // apple-icon.png también se detecta desde src/app/apple-icon.png
   icons: {
     icon: [
       { url: "/favicon.ico" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
     ],
     apple: "/apple-touch-icon.png",
   },

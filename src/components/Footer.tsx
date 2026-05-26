@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { BUSINESS_NAME, HOURS, getWhatsAppUrl } from '@/lib/constants';
 
 /* ─── Footer ───────────────────────────────────────────────────────── */
@@ -36,38 +37,26 @@ export function Footer() {
         {/* ── Grid principal 3 columnas ── */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 lg:gap-16">
 
-          {/* ── Col 1 — Wordmark + tagline ── */}
+          {/* ── Col 1 — Logo + tagline ── */}
           <div>
-            <p
-              className="font-display font-light text-[var(--text-primary)]"
-              style={{
-                fontSize: 'var(--text-2xl)',
-                lineHeight: 1.1,
-                letterSpacing: 'var(--tracking-tight)',
-                marginBottom: '0.5rem',
-              }}
-            >
-              {BUSINESS_NAME}
-            </p>
-            <p
-              className="font-display font-light italic text-[var(--gold)]"
-              style={{
-                fontSize: 'var(--text-base)',
-                opacity: 0.85,
-              }}
-            >
-              de pelos
-            </p>
+            <Image
+              src="/images/logo.png"
+              alt="Carlos Gañan — Barbería de autor en San Rafael"
+              width={200}
+              height={56}
+              className="object-contain w-auto h-auto mb-4"
+              style={{ maxWidth: '200px' }}
+            />
 
             <p
-              className="text-[var(--text-secondary)] mt-4 font-light"
+              className="text-[var(--text-secondary)] mt-2 font-light"
               style={{
                 fontSize: 'var(--text-sm)',
                 lineHeight: 1.7,
                 maxWidth: '28ch',
               }}
             >
-              Barbería premium en San Rafael, Mendoza.
+              Barbería de autor en San Rafael, Mendoza.
             </p>
           </div>
 

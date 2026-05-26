@@ -16,7 +16,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Carlos Gañan — Barbería Premium San Rafael, Mendoza";
+export const alt = "Carlos Gañan — Barbería de autor en San Rafael, Mendoza";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -68,7 +68,7 @@ export default function OgImage() {
             fontFamily: "Georgia, serif",
           }}
         >
-          BARBERÍA PREMIUM · SAN RAFAEL, MENDOZA
+          BARBERÍA DE AUTOR · SAN RAFAEL, MENDOZA
         </p>
 
         {/* Título */}

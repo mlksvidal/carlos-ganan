@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
@@ -84,31 +85,6 @@ function splitWordsDom(el: HTMLElement): HTMLElement[] {
   });
 
   return wordEls;
-}
-
-/* ─── Scissors SVG — placeholder elegante ─────────────────────────── */
-
-function ScissorsIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={28}
-      height={28}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="6" cy="6" r="3" />
-      <circle cx="6" cy="18" r="3" />
-      <line x1="20" y1="4" x2="8.12" y2="15.88" />
-      <line x1="14.47" y1="14.48" x2="20" y2="20" />
-      <line x1="8.12" y1="8.12" x2="12" y2="12" />
-    </svg>
-  );
 }
 
 /* ─── HeroSection ──────────────────────────────────────────────────── */
@@ -276,26 +252,28 @@ export function HeroSection() {
       ref={sectionRef}
       id="hero"
       className="relative min-h-[100dvh] flex"
-      aria-label="Hero — Carlos Gañan Barbería Premium"
+      aria-label="Hero — Carlos Gañan Barbería de autor en San Rafael"
     >
       {/* ─────────────────────────────────────────────────────
           MOBILE: foto full-bleed de fondo (visible solo en mobile)
       ──────────────────────────────────────────────────────── */}
       <div className="lg:hidden absolute inset-0 z-0" aria-hidden="true">
-        {/* TODO: usuario reemplazará con /public/images/hero.jpg */}
-        <div className="relative w-full h-full placeholder-img">
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-[var(--text-secondary)] opacity-30">
-            <ScissorsIcon />
-          </div>
-          {/* Overlay gradiente para legibilidad del texto */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                'linear-gradient(to top, rgba(10,8,7,0.95) 40%, rgba(10,8,7,0.6) 70%, rgba(10,8,7,0.3) 100%)',
-            }}
-          />
-        </div>
+        <Image
+          src="/images/hero-mobile.png"
+          alt="Carlos Gañan cortando con tijera y máquina en su barbería"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-top"
+        />
+        {/* Overlay gradiente para legibilidad del texto */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to top, rgba(10,8,7,0.95) 40%, rgba(10,8,7,0.6) 70%, rgba(10,8,7,0.3) 100%)',
+          }}
+        />
       </div>
 
       {/* ─────────────────────────────────────────────────────
@@ -395,47 +373,24 @@ export function HeroSection() {
               bottom: '-10%',
             }}
           >
-            {/* TODO: usuario reemplazará con /public/images/hero.jpg */}
-            {/* Placeholder elegante con shimmer dorado */}
-            <div className="placeholder-img w-full h-full">
-              <div
-                className="flex flex-col items-center justify-center gap-3 text-[var(--text-secondary)]"
-                style={{ opacity: 0.2 }}
-              >
-                <ScissorsIcon />
-                <span
-                  className="text-[0.6875rem] tracking-[0.18em] uppercase"
-                  style={{ letterSpacing: '0.18em' }}
-                >
-                  hero.jpg
-                </span>
-              </div>
-
-              {/* Gradiente overlay — transición suave del texto al borde */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    'linear-gradient(to right, rgba(10,8,7,0.85) 0%, rgba(10,8,7,0.2) 30%, transparent 60%)',
-                }}
-              />
-            </div>
-          </div>
-
-          {/*
-            NOTA PARA IMPLEMENTACIÓN:
-            Cuando tengas la foto real, reemplazar el placeholder por:
-            (importar Image de 'next/image')
-
             <Image
-              src="/images/hero.jpg"
-              alt="Barbero Carlos Gañan trabajando con precisión artesanal"
+              src="/images/hero.png"
+              alt="Carlos Gañan cortando con tijera y máquina en su barbería"
               fill
               priority
-              className="object-cover object-center will-change-transform"
-              sizes="55vw"
+              sizes="(min-width: 1024px) 55vw, 100vw"
+              className="object-cover object-center"
             />
-          */}
+
+            {/* Gradiente overlay — transición suave del texto al borde */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  'linear-gradient(to right, rgba(10,8,7,0.85) 0%, rgba(10,8,7,0.2) 30%, transparent 60%)',
+              }}
+            />
+          </div>
         </div>
 
       </div>
