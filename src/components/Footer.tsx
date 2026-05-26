@@ -1,5 +1,9 @@
+'use client';
+
+import { useRef } from 'react';
 import Image from 'next/image';
 import { BUSINESS_NAME, HOURS, getWhatsAppUrl } from '@/lib/constants';
+import { useScrollReveal } from '@/lib/useScrollReveal';
 
 /* ─── Footer ───────────────────────────────────────────────────────── */
 
@@ -20,6 +24,14 @@ export function Footer() {
   const year = new Date().getFullYear();
   const whatsappUrl = getWhatsAppUrl();
 
+  // Scroll reveal — 3 columnas en stagger
+  const gridRef = useRef<HTMLDivElement>(null);
+  useScrollReveal(gridRef, { selector: '.footer-col', stagger: 0.15, y: 24, duration: 0.8 });
+
+  // Copyright reveal — sutil, sin stagger
+  const copyrightRef = useRef<HTMLDivElement>(null);
+  useScrollReveal(copyrightRef, { y: 12, duration: 0.6, delay: 0.3 });
+
   return (
     <footer
       aria-label="Footer — Carlos Gañan Barbería"
@@ -35,10 +47,10 @@ export function Footer() {
         style={{ maxWidth: 'var(--container-xl)' }}
       >
         {/* ── Grid principal 3 columnas ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 lg:gap-16">
+        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 lg:gap-16">
 
           {/* ── Col 1 — Logo + tagline ── */}
-          <div>
+          <div className="footer-col">
             <Image
               src="/images/logo-clean.png"
               alt="Carlos Gañan — Barbería de autor en San Rafael"
@@ -61,7 +73,7 @@ export function Footer() {
           </div>
 
           {/* ── Col 2 — Dirección + Horarios ── */}
-          <div>
+          <div className="footer-col">
             <p
               className="text-[var(--gold)] uppercase tracking-[0.14em] font-medium mb-4"
               style={{ fontSize: 'var(--text-xs)' }}
@@ -109,7 +121,7 @@ export function Footer() {
           </div>
 
           {/* ── Col 3 — WhatsApp + tagline ── */}
-          <div>
+          <div className="footer-col">
             <p
               className="text-[var(--gold)] uppercase tracking-[0.14em] font-medium mb-4"
               style={{ fontSize: 'var(--text-xs)' }}
@@ -171,7 +183,7 @@ export function Footer() {
         />
 
         {/* ── Copyright ── */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+        <div ref={copyrightRef} className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
           <p
             className="text-[var(--text-secondary)]"
             style={{

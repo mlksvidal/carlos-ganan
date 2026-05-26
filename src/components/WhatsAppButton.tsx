@@ -1,7 +1,10 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 import { getWhatsAppUrl } from '@/lib/constants';
 import { clsx } from 'clsx';
+import { useMagneticHover } from '@/lib/useMagneticHover';
 
 /* ─── Ícono WhatsApp — inline SVG monolínea ───────────────────────── */
 
@@ -40,128 +43,156 @@ interface WhatsAppButtonProps {
   className?: string;
 }
 
-/* ─── Componente principal ─────────────────────────────────────────── */
+/* ─── Variante PRIMARY ─────────────────────────────────────────────── */
 
-/**
- * WhatsAppButton — CTA de reserva vía WhatsApp.
- *
- * Variantes:
- * - `primary`  → Botón grande rectangular (CTA hero / sección reserva)
- * - `floating` → Fixed bottom-right, solo mobile (círculo verde WhatsApp)
- * - `inline`   → Texto link con underline dorado
- *
- * Todos usan:
- * - target="_blank" + rel="noopener noreferrer" (anti tab-nabbing)
- * - encodeURIComponent en mensaje (via getWhatsAppUrl)
- * - border-radius: 0 (estética editorial — 0px radius)
- */
-export function WhatsAppButton({
-  variant = 'primary',
-  service,
-  message,
+function WhatsAppPrimary({
+  href,
   label,
   className,
-}: WhatsAppButtonProps) {
-  const href = getWhatsAppUrl(message, service);
+}: {
+  href: string;
+  label: string;
+  className?: string;
+}) {
+  const magneticRef = useRef<HTMLAnchorElement>(null);
+  useMagneticHover(magneticRef, 0.28);
 
-  /* ── Variante PRIMARY — CTA grande rectangular dorado ── */
-  if (variant === 'primary') {
-    const buttonLabel = label ?? 'Reservar turno';
-
-    return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`${buttonLabel} por WhatsApp`}
+  return (
+    <a
+      ref={magneticRef}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${label} por WhatsApp`}
+      className={clsx(
+        // Base — rectangular, sin border-radius
+        'group relative inline-flex items-center gap-3',
+        'border border-[rgba(201,169,97,0.70)] bg-transparent',
+        'px-7 py-[14px] min-h-[48px]',
+        // Tipografía — Inter uppercase tracking premium
+        'text-[var(--gold)] font-[var(--font-inter,Inter,system-ui,sans-serif)]',
+        'text-xs tracking-[0.14em] uppercase font-medium',
+        // Overflow para la line animation
+        'overflow-hidden',
+        // Transiciones
+        'transition-colors duration-[var(--dur-normal)] ease-[var(--ease-hover)]',
+        // Hover — fill dorado, texto inverso
+        'hover:bg-[var(--gold)] hover:border-[var(--gold)] hover:text-[var(--text-inverse)]',
+        // Focus
+        'focus-visible:outline-2 focus-visible:outline-[var(--gold-pale)] focus-visible:outline-offset-3',
+        // Active
+        'active:bg-[var(--gold-dim)] active:border-[var(--gold-dim)]',
+        className,
+      )}
+    >
+      {/* Background sweep animation — line que atraviesa el botón */}
+      <span
+        aria-hidden="true"
         className={clsx(
-          // Base — rectangular, sin border-radius
-          'group relative inline-flex items-center gap-3',
-          'border border-[rgba(201,169,97,0.70)] bg-transparent',
-          'px-7 py-[14px] min-h-[48px]',
-          // Tipografía — Inter uppercase tracking premium
-          'text-[var(--gold)] font-[var(--font-inter,Inter,system-ui,sans-serif)]',
-          'text-xs tracking-[0.14em] uppercase font-medium',
-          // Overflow para la line animation
-          'overflow-hidden',
-          // Transiciones
-          'transition-colors duration-[var(--dur-normal)] ease-[var(--ease-hover)]',
-          // Hover — fill dorado, texto inverso
-          'hover:bg-[var(--gold)] hover:border-[var(--gold)] hover:text-[var(--text-inverse)]',
-          // Focus
-          'focus-visible:outline-2 focus-visible:outline-[var(--gold-pale)] focus-visible:outline-offset-3',
-          // Active
-          'active:bg-[var(--gold-dim)] active:border-[var(--gold-dim)]',
-          className,
+          'absolute inset-0 -translate-x-full',
+          'bg-[var(--gold)]',
+          'transition-transform duration-[var(--dur-normal)] ease-[var(--ease-hover)]',
+          'group-hover:translate-x-0',
+          // El fondo va detrás del texto
+          '-z-[1]',
         )}
-      >
-        {/* Background sweep animation — line que atraviesa el botón */}
-        <span
-          aria-hidden="true"
-          className={clsx(
-            'absolute inset-0 -translate-x-full',
-            'bg-[var(--gold)]',
-            'transition-transform duration-[var(--dur-normal)] ease-[var(--ease-hover)]',
-            'group-hover:translate-x-0',
-            // El fondo va detrás del texto
-            '-z-[1]',
-          )}
-        />
-        <WhatsAppIcon size={16} className="relative z-10 flex-shrink-0" />
-        <span className="relative z-10">{buttonLabel}</span>
-      </a>
-    );
-  }
+      />
+      <WhatsAppIcon size={16} className="relative z-10 flex-shrink-0" />
+      <span className="relative z-10">{label}</span>
+    </a>
+  );
+}
 
-  /* ── Variante FLOATING — fixed mobile-only, círculo verde ── */
-  if (variant === 'floating') {
-    return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Reservar turno por WhatsApp"
-        className={clsx(
-          // Solo visible en mobile
-          'md:hidden',
-          // Posición — fixed bottom-right
-          'fixed bottom-6 right-6',
-          // Z-index sobre todo — z-toast (600)
-          'z-[600]',
-          // Forma — círculo 56×56
-          'w-14 h-14 rounded-full',
-          // Fondo verde WhatsApp
-          'bg-[#25D366]',
-          // Layout
-          'inline-flex items-center justify-center',
-          // Sombra
-          'shadow-[0_4px_20px_rgba(0,0,0,0.40)]',
-          // Color ícono — blanco
-          'text-white',
-          // Hover — ligero scale
-          'hover:scale-[1.06] hover:shadow-[0_6px_28px_rgba(0,0,0,0.50)]',
-          // Transición
-          'transition-[transform,box-shadow] duration-[var(--dur-fast)] ease-[var(--ease-out-quart)]',
-          // Focus
-          'focus-visible:outline-2 focus-visible:outline-[var(--gold-pale)] focus-visible:outline-offset-3',
-          className,
-        )}
-      >
-        <WhatsAppIcon size={24} />
-        <span className="sr-only">Reservar turno por WhatsApp</span>
-      </a>
-    );
-  }
+/* ─── Variante FLOATING ────────────────────────────────────────────── */
 
-  /* ── Variante INLINE — texto link con underline dorado ── */
-  const inlineLabel = label ?? 'Reservar por WhatsApp';
+function WhatsAppFloating({
+  href,
+  className,
+}: {
+  href: string;
+  className?: string;
+}) {
+  const floatingRef = useRef<HTMLAnchorElement>(null);
 
+  useEffect(() => {
+    const el = floatingRef.current;
+    if (!el) return;
+
+    const prefersReduced = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+    if (prefersReduced) return;
+
+    // Breathing animation — leve y:-4px loop infinito yoyo
+    const tween = gsap.to(el, {
+      y: -4,
+      duration: 2.5,
+      ease: 'sine.inOut',
+      repeat: -1,
+      yoyo: true,
+    });
+
+    return () => {
+      tween.kill();
+    };
+  }, []);
+
+  return (
+    <a
+      ref={floatingRef}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Reservar turno por WhatsApp"
+      className={clsx(
+        // Solo visible en mobile
+        'md:hidden',
+        // Posición — fixed bottom-right
+        'fixed bottom-6 right-6',
+        // Z-index sobre todo — z-toast (600)
+        'z-[600]',
+        // Forma — círculo 56×56
+        'w-14 h-14 rounded-full',
+        // Fondo verde WhatsApp
+        'bg-[#25D366]',
+        // Layout
+        'inline-flex items-center justify-center',
+        // Sombra
+        'shadow-[0_4px_20px_rgba(0,0,0,0.40)]',
+        // Color ícono — blanco
+        'text-white',
+        // Hover — ligero scale
+        'hover:scale-[1.06] hover:shadow-[0_6px_28px_rgba(0,0,0,0.50)]',
+        // Transición
+        'transition-[transform,box-shadow] duration-[var(--dur-fast)] ease-[var(--ease-out-quart)]',
+        // Focus
+        'focus-visible:outline-2 focus-visible:outline-[var(--gold-pale)] focus-visible:outline-offset-3',
+        className,
+      )}
+    >
+      <WhatsAppIcon size={24} />
+      <span className="sr-only">Reservar turno por WhatsApp</span>
+    </a>
+  );
+}
+
+/* ─── Variante INLINE ──────────────────────────────────────────────── */
+
+function WhatsAppInline({
+  href,
+  label,
+  className,
+}: {
+  href: string;
+  label: string;
+  className?: string;
+}) {
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={`${inlineLabel} — abre WhatsApp`}
+      aria-label={`${label} — abre WhatsApp`}
       className={clsx(
         'group inline-flex items-center gap-2',
         // Tipografía
@@ -178,7 +209,7 @@ export function WhatsAppButton({
       )}
     >
       <span className="relative">
-        {inlineLabel}
+        {label}
         {/* Underline dorado — width 0 → 100% en hover */}
         <span
           aria-hidden="true"
@@ -192,5 +223,53 @@ export function WhatsAppButton({
       </span>
       <WhatsAppIcon size={14} className="flex-shrink-0 opacity-80 group-hover:opacity-100 transition-opacity duration-[var(--dur-fast)]" />
     </a>
+  );
+}
+
+/* ─── Componente principal ─────────────────────────────────────────── */
+
+/**
+ * WhatsAppButton — CTA de reserva vía WhatsApp.
+ *
+ * Variantes:
+ * - `primary`  → Botón grande rectangular con magnetic hover (CTA hero / sección reserva)
+ * - `floating` → Fixed bottom-right, solo mobile (círculo verde WhatsApp con breathing animation)
+ * - `inline`   → Texto link con underline dorado
+ *
+ * Todos usan:
+ * - target="_blank" + rel="noopener noreferrer" (anti tab-nabbing)
+ * - encodeURIComponent en mensaje (via getWhatsAppUrl)
+ * - border-radius: 0 (estética editorial — 0px radius)
+ */
+export function WhatsAppButton({
+  variant = 'primary',
+  service,
+  message,
+  label,
+  className,
+}: WhatsAppButtonProps) {
+  const href = getWhatsAppUrl(message, service);
+
+  if (variant === 'primary') {
+    return (
+      <WhatsAppPrimary
+        href={href}
+        label={label ?? 'Reservar turno'}
+        className={className}
+      />
+    );
+  }
+
+  if (variant === 'floating') {
+    return <WhatsAppFloating href={href} className={className} />;
+  }
+
+  // inline
+  return (
+    <WhatsAppInline
+      href={href}
+      label={label ?? 'Reservar por WhatsApp'}
+      className={className}
+    />
   );
 }

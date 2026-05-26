@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import Image from 'next/image';
 import { X, Menu } from 'lucide-react';
 import { clsx } from 'clsx';
+import { gsap } from 'gsap';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { BUSINESS_NAME } from '@/lib/constants';
 
@@ -70,6 +71,8 @@ function NavLink({
  */
 export function Nav() {
   const navRef = useRef<HTMLElement>(null);
+  const logoRef = useRef<HTMLAnchorElement>(null);
+  const logoInitRef = useRef(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -108,6 +111,28 @@ export function Nav() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
+
+  /* ── Logo fade-in al primer mount — solo una vez ── */
+  useEffect(() => {
+    if (logoInitRef.current) return;
+    if (!logoRef.current) return;
+    logoInitRef.current = true;
+
+    const prefersReduced = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    if (prefersReduced) {
+      gsap.set(logoRef.current, { opacity: 1, scale: 1 });
+      return;
+    }
+
+    gsap.fromTo(
+      logoRef.current,
+      { opacity: 0, scale: 0.96 },
+      { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out', delay: 0.15 }
+    );
+  }, []);
 
   /* ── Mobile drawer: bloquear scroll del body cuando está abierto ── */
   useEffect(() => {
@@ -180,6 +205,7 @@ export function Nav() {
         >
           {/* ── Logo izquierda ── */}
           <a
+            ref={logoRef}
             href="#"
             className={clsx(
               'flex items-center',
